@@ -1,0 +1,11 @@
+{
+  "name": "aashray-portfolio",
+  "version": "1.0.0",
+  "description": "Portfolio for Aashray Shukla",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx live-server --port=3000"
+  },
+  "author": "Aashray",
+  "license": "ISC"
+}
