@@ -1144,7 +1144,7 @@ a { text-decoration: none; color: inherit; }
 }
 @media (max-width: 768px) {
   .section { padding: 60px 0; }
-  .hero-title { font-size: 3rem; }
+  .hero-title { font-size: clamp(2rem, 8vw, 3rem); }
   
   /* Disable game toggle and XP bar on mobile for cleaner UX and to prevent layout overflow */
   #game-toggle { display: none !important; }
@@ -1161,6 +1161,11 @@ a { text-decoration: none; color: inherit; }
   .ladder-graphic-wrapper { left: 20px; }
   .ladder-entries { margin-left: 60px; }
   .ladder-node { padding: 20px; }
+  .ladder-node .node-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
   
   /* Mobile Boss Fight -> Simplified Quiz Card */
   .contact-container { width: 100%; padding: 0 20px; }
