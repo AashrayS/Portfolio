@@ -189,6 +189,7 @@ a { text-decoration: none; color: inherit; }
   font-family: var(--font-mono);
   font-size: 1.2rem;
   min-height: 2em;
+  white-space: pre-wrap;
 }
 
 /* ===== GAMIFICATION UI ===== */
@@ -564,6 +565,7 @@ a { text-decoration: none; color: inherit; }
   margin-bottom: 24px;
   letter-spacing: -2px;
   min-height: 2.2em; /* Reserve space for typing */
+  white-space: pre-wrap;
 }
 .hero-subtitle {
   font-size: 1.1rem;

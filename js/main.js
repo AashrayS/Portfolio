@@ -165,11 +165,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function typeText(elementId, text, speed = 50) {
     const el = document.getElementById(elementId);
     if(!el) return;
-    el.innerHTML = '';
+    el.textContent = '';
     let i = 0;
     function type() {
       if (i < text.length) {
-        el.innerHTML += text.charAt(i);
+        el.textContent += text.charAt(i);
         i++;
         setTimeout(type, speed);
       }
@@ -751,28 +751,33 @@ document.addEventListener('DOMContentLoaded', () => {
   const ladderContainer = document.querySelector('.career-ladder-container');
   const careerSprite = document.getElementById('career-sprite');
   if (ladderContainer && careerSprite) {
+    let ticking = false;
     window.addEventListener('scroll', () => {
-      const rect = ladderContainer.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-      
-      // Start animating when the top of the container is 75% down the viewport
-      // Stop animating when the bottom of the container reaches 25% down the viewport
-      const startScroll = windowHeight * 0.75;
-      const endScroll = -rect.height + (windowHeight * 0.25);
-      
-      let progress = 0;
-      if (rect.top <= startScroll && rect.top >= endScroll) {
-        progress = (startScroll - rect.top) / (startScroll - endScroll);
-      } else if (rect.top < endScroll) {
-        progress = 1;
-      } else if (rect.top > startScroll) {
-        progress = 0;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const rect = ladderContainer.getBoundingClientRect();
+          const windowHeight = window.innerHeight;
+          
+          const startScroll = windowHeight * 0.75;
+          const endScroll = -rect.height + (windowHeight * 0.25);
+          
+          let progress = 0;
+          if (rect.top <= startScroll && rect.top >= endScroll) {
+            progress = (startScroll - rect.top) / (startScroll - endScroll);
+          } else if (rect.top < endScroll) {
+            progress = 1;
+          } else if (rect.top > startScroll) {
+            progress = 0;
+          }
+          
+          const maxTop = rect.height - 120; 
+          const spriteTop = progress * maxTop;
+          careerSprite.style.transform = `translateY(${spriteTop}px)`;
+          
+          ticking = false;
+        });
+        ticking = true;
       }
-      
-      // Ladder rails height minus the sprite height, plus some padding
-      const maxTop = rect.height - 120; 
-      const spriteTop = progress * maxTop;
-      careerSprite.style.transform = `translateY(${spriteTop}px)`;
     });
   }
   // --- 3D WIZARD BOT (Three.js) ---
