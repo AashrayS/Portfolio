@@ -45,6 +45,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // --- RESET STATE ON RELOAD ---
+  if (history.scrollRestoration) {
+    history.scrollRestoration = 'manual';
+  }
+  window.scrollTo(0, 0);
+  localStorage.removeItem('as_achievements');
+
+  // --- MOBILE NAV TOGGLE ---
+  const navToggle = document.getElementById('nav-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  if (navToggle && mobileMenu) {
+    navToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('active');
+    });
+    // Close mobile menu when a link is clicked
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('active');
+      });
+    });
+  }
+
   // --- NAVBAR SCROLL EFFECT ---
   const navbar = document.getElementById('navbar');
   window.addEventListener('scroll', () => {
@@ -178,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function startHeroTyping() {
-    typeText('hero-title-type', "I build products\nthat grow.", 60);
+    typeText('hero-title-type', "Strategy. Product.\nGrowth.", 60);
   }
 
   // --- CHARACTER GUIDE & XP BAR ---

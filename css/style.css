@@ -535,7 +535,44 @@ a { text-decoration: none; color: inherit; }
   font-family: var(--font-heading);
   font-weight: 700;
 }
-.nav-toggle, .mobile-menu { display: none; }
+.nav-toggle { 
+  display: none; 
+  flex-direction: column;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.nav-toggle span {
+  width: 30px;
+  height: 3px;
+  background: var(--dark-color);
+  border-radius: 3px;
+}
+.mobile-menu {
+  position: fixed;
+  top: 80px;
+  left: 0;
+  width: 100%;
+  background: var(--bg-color);
+  border-bottom: 2px solid var(--dark-color);
+  display: none;
+  flex-direction: column;
+  gap: 20px;
+  padding: 30px;
+  z-index: 99;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+.mobile-menu.active {
+  display: flex;
+}
+.mobile-link {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: var(--dark-color);
+  text-decoration: none;
+}
 
 /* ===== HERO ===== */
 .hero.section {
@@ -1106,10 +1143,47 @@ a { text-decoration: none; color: inherit; }
   .nav-toggle { display: flex; }
 }
 @media (max-width: 768px) {
+  .section { padding: 60px 0; }
+  .hero-title { font-size: 3rem; }
+  
+  /* Disable game toggle on mobile for cleaner UX */
+  #game-toggle { display: none !important; }
+  
+  /* Journey / Old Timeline */
   .journey-path { left: 20px; }
   .node-marker { left: 20px; }
   .node-content { width: calc(100% - 60px); margin-left: 60px !important; }
   .left-node, .right-node { justify-content: flex-start; }
+  
+  /* Career Ladder Adjustments */
+  .career-ladder-container { padding: 20px; }
+  .ladder-graphic-wrapper { left: 20px; }
+  .ladder-entries { margin-left: 60px; }
+  .ladder-node { padding: 20px; }
+  
+  /* Boss Fight Mobile Fixes */
+  .contact-container { width: 100%; padding: 0 10px; }
+  .cinematic-arena {
+    flex-direction: column;
+    height: auto;
+    padding: 20px;
+    align-items: center;
+    gap: 20px;
+  }
+  .cinematic-bot, .cinematic-boss { position: static; }
+  .boss-ui {
+    position: static;
+    width: 100%;
+    margin: 0;
+  }
+  .boss-ui::before, .boss-ui::after { display: none; } /* Hide speech bubble pointers on mobile */
+  .health-bars-overlay {
+    position: static;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .hp-bar-container { width: 100%; }
 }
 
 /* ================================================================
