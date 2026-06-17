@@ -1203,7 +1203,41 @@ a { text-decoration: none; color: inherit; }
     grid-template-columns: 1fr; 
     gap: 20px; 
   }
-  .quest-card { height: 320px; }
+  .quest-card { 
+    height: 340px; 
+  }
+  .quest-front, .quest-back {
+    padding: 24px;
+    border-radius: 16px;
+  }
+  .quest-front h3 {
+    font-size: 1.6rem;
+    margin: 15px 0 8px;
+  }
+  .quest-back h3 {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+  }
+  .quest-back p {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 12px;
+  }
+  .quest-tags {
+    margin-bottom: 12px;
+    gap: 6px;
+  }
+  .quest-tags span {
+    padding: 2px 8px;
+    font-size: 0.75rem;
+  }
+  .quest-xp {
+    font-size: 0.85rem;
+  }
+  .flip-icon {
+    bottom: 24px;
+    right: 24px;
+  }
   
   /* === EXPERIENCE / CAREER LADDER === */
   .experience-section { border-top: 2px solid var(--dark-color); }
