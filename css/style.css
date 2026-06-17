@@ -1152,46 +1152,92 @@ a { text-decoration: none; color: inherit; }
   .nav-toggle { display: flex; }
 }
 @media (max-width: 768px) {
-  .section { padding: 60px 0; }
+  /* === GLOBAL SECTION FIXES === */
+  /* Remove the massive neon padding gaps and min-height forcing */
+  .section { 
+    padding: 40px 0; 
+    min-height: auto; 
+  }
+  .container { padding: 0 16px; }
   .hero-title { font-size: clamp(2rem, 8vw, 3rem); }
+  .hero.section { padding-top: 100px; }
   
-  /* Disable game toggle and sidebars on mobile */
+  /* Hide sidebars and game elements on mobile */
   #game-toggle, #xp-container, #quests-loader-bar, #character-guide { display: none !important; }
   
-  /* Skill Tree Adjustments */
-  .skill-tree-container { min-height: 400px; padding: 20px; }
-  .tree-nodes-wrapper { height: 350px; }
-  .tree-node { width: 50px; height: 50px; }
-  .tree-node i { width: 24px; height: 24px; }
-  .node-center { width: 60px; height: 60px; }
+  /* === ABOUT SECTION === */
+  .about-section { border-top: 2px solid var(--dark-color); border-bottom: 2px solid var(--dark-color); }
+  .about-grid { gap: 20px; }
   
-  .node-branch-1.node-pos-1 { top: 15%; left: 20%; }
-  .node-branch-1.node-pos-2 { top: 5%; left: 5%; }
-  .node-branch-2.node-pos-1 { top: 15%; right: 20%; }
-  .node-branch-2.node-pos-2 { top: 5%; right: 5%; }
+  /* === SKILL TREE (SERVICES) === */
+  .services-section .section-header { margin-bottom: 30px; }
+  .section-header .section-title { font-size: clamp(2rem, 6vw, 4rem); }
+  .skill-tree-container { 
+    min-height: 350px; 
+    padding: 15px; 
+    border-radius: 16px;
+    overflow: visible; /* CRITICAL: prevent clipping nodes at edges */
+  }
+  .tree-nodes-wrapper { 
+    height: 300px; 
+    overflow: visible; /* allow nodes near edges to show fully */
+  }
+  #tree-lines { height: 300px; }
+  .tree-node { width: 44px; height: 44px; }
+  .tree-node i { width: 20px; height: 20px; }
+  .node-center { width: 54px; height: 54px; }
   
-  /* Contact Alignment Fixes */
-  .contact-email { font-size: clamp(1.2rem, 5vw, 1.5rem); word-break: break-all; margin-bottom: 30px; }
-  .contact-content { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
-
+  /* Bring nodes inward so they don't clip on small screens */
+  .node-branch-1.node-pos-1 { top: 18%; left: 22%; }
+  .node-branch-1.node-pos-2 { top: 5%; left: 8%; }
+  .node-branch-2.node-pos-1 { top: 18%; right: 22%; }
+  .node-branch-2.node-pos-2 { top: 5%; right: 8%; }
+  .node-branch-3.node-pos-1 { bottom: 18%; }
+  .node-branch-3.node-pos-2 { bottom: 3%; }
+  
+  .tree-info-panel { width: 180px; font-size: 0.85rem; }
+  .tree-info-panel h3 { font-size: 0.95rem; }
+  
+  /* === QUEST CARDS === */
+  .quest-grid { 
+    grid-template-columns: 1fr; 
+    gap: 20px; 
+  }
+  .quest-card { height: 320px; }
+  
+  /* === EXPERIENCE / CAREER LADDER === */
+  .experience-section { border-top: 2px solid var(--dark-color); }
+  .career-ladder-container { padding: 15px; max-width: 100%; }
+  .ladder-graphic-wrapper { left: 15px; }
+  .ladder-entries { margin-left: 45px; }
+  .ladder-node { padding: 15px; }
+  .ladder-node .node-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .ladder-node h3 { font-size: 1rem; }
+  .ladder-node .node-date { font-size: 0.75rem; }
+  
   /* Journey / Old Timeline */
   .journey-path { left: 20px; }
   .node-marker { left: 20px; }
   .node-content { width: calc(100% - 60px); margin-left: 60px !important; }
   .left-node, .right-node { justify-content: flex-start; }
   
-  /* Career Ladder Adjustments */
-  .career-ladder-container { padding: 20px; }
-  .ladder-graphic-wrapper { left: 20px; }
-  .ladder-entries { margin-left: 60px; }
-  .ladder-node { padding: 20px; }
-  .ladder-node .node-meta {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
+  /* === CONTACT === */
+  .contact-section .section-title { font-size: clamp(2rem, 6vw, 3.5rem); }
+  .contact-email { font-size: clamp(1rem, 4vw, 1.5rem); word-break: break-all; margin-bottom: 30px; }
+  .contact-content { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
+  .contact-container { padding: 0 16px; }
+  .contact-text { font-size: 1rem; }
+  .social-link { width: 48px; height: 48px; }
   
-
+  /* === FOOTER === */
+  .footer-container { flex-direction: column; gap: 10px; text-align: center; }
+  
+  /* === GATE OVERLAY === */
+  .gate-overlay h2 { font-size: 1.5rem; }
 }
 
 /* ================================================================
