@@ -1164,26 +1164,46 @@ a { text-decoration: none; color: inherit; }
   /* Boss Fight Mobile Fixes */
   .contact-container { width: 100%; padding: 0 10px; }
   .cinematic-arena {
-    flex-direction: column;
-    height: auto;
-    padding: 20px;
-    align-items: center;
-    gap: 20px;
+    flex-direction: row;
+    height: 500px;
+    padding: 10px;
+    align-items: flex-end;
   }
-  .cinematic-bot, .cinematic-boss { position: static; }
-  .boss-ui {
-    position: static;
-    width: 100%;
-    margin: 0;
-  }
-  .boss-ui::before, .boss-ui::after { display: none; } /* Hide speech bubble pointers on mobile */
-  .health-bars-overlay {
-    position: static;
-    flex-direction: column;
-    gap: 10px;
+  .cinematic-bot {
+    width: 70px;
+    height: 84px;
     margin-bottom: 20px;
+    position: static;
   }
-  .hp-bar-container { width: 100%; }
+  .cinematic-boss {
+    width: 140px;
+    height: 168px;
+    margin-bottom: 20px;
+    position: static;
+  }
+  .boss-ui {
+    position: absolute;
+    top: 60px;
+    left: 10px;
+    width: calc(100% - 20px);
+    margin: 0;
+    z-index: 20;
+  }
+  .boss-ui::before, .boss-ui::after { display: none; }
+  .health-bars-overlay {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 0;
+  }
+  .hp-bar-container { width: 45%; padding: 4px 8px; }
+  .hp-label { font-size: 0.55rem; }
+  
+  .projectile.fireball { left: 50px; bottom: 50px; }
+  .projectile.laser { right: 100px; bottom: 100px; }
 }
 
 /* ================================================================
