@@ -1146,8 +1146,9 @@ a { text-decoration: none; color: inherit; }
   .section { padding: 60px 0; }
   .hero-title { font-size: 3rem; }
   
-  /* Disable game toggle on mobile for cleaner UX */
+  /* Disable game toggle and XP bar on mobile for cleaner UX and to prevent layout overflow */
   #game-toggle { display: none !important; }
+  #xp-container { display: none !important; }
   
   /* Journey / Old Timeline */
   .journey-path { left: 20px; }
@@ -1178,7 +1179,7 @@ a { text-decoration: none; color: inherit; }
   }
   .boss-ui {
     position: static;
-    width: 100%;
+    width: calc(100% - 10px);
     margin: 0 auto 30px auto;
     box-shadow: 6px 6px 0 var(--accent-pink);
   }
