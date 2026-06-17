@@ -281,7 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
     first_blood: { id: 'first_blood', name: 'Press Start', desc: 'Started the journey', icon: 'play' },
     skill_master: { id: 'skill_master', name: 'Skill Master', desc: 'Explored the skill tree', icon: 'book' },
     quest_hunter: { id: 'quest_hunter', name: 'Quest Hunter', desc: 'Flipped a quest card', icon: 'sword' },
-    game_complete: { id: 'game_complete', name: 'Boss Room', desc: 'Reached the contact section', icon: 'flag' },
+    game_complete: { id: 'game_complete', name: 'Contact Unlocked', desc: 'Reached the contact section', icon: 'flag' },
     konami: { id: 'konami', name: 'Hacker', desc: 'Entered the secret code', icon: 'terminal' }
   };
 
@@ -357,7 +357,8 @@ document.addEventListener('DOMContentLoaded', () => {
         msg = "JOURNEY UNLOCKED!";
       } else if (id === 'contact' && unlocked.length >= 3) {
         shouldUnlock = true;
-        msg = "BOSS LAIR UNLOCKED!";
+        msg = "CONTACT UNLOCKED!";
+        if (window.checkAchievement) window.checkAchievement('game_complete');
       }
 
       if (shouldUnlock) {
@@ -378,182 +379,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   renderAchievements();
 
-  // --- BOSS FIGHT (CONTACT) ---
-  const bossLair = document.getElementById('boss-lair');
-  const bossUI = document.getElementById('boss-ui');
-  const contactRevealed = document.getElementById('contact-revealed');
-  const cineBoss = document.getElementById('cine-boss');
-  const cineBot = document.getElementById('cine-bot');
-  const cineProjectile = document.getElementById('cine-projectile');
-  
-  let bossHp = 3;
-  let botHp = 3;
-  let currentQuestionIdx = 0;
 
-  const bossQuestions = [
-    {
-      text: "HALT! I am the Gatekeeper of the Inbox.",
-      riddle: "Question 1: What is the ultimate metric for true product growth?",
-      options: [
-        { text: "A) Lines of Code", answer: "wrong" },
-        { text: "B) User Retention", answer: "correct" },
-        { text: "C) Meetings Scheduled", answer: "wrong" }
-      ]
-    },
-    {
-      text: "Impressive! But you haven't won yet.",
-      riddle: "Question 2: What GTM framework focuses on product adoption and scaling?",
-      options: [
-        { text: "A) 3Cs & 4Ps Framework", answer: "correct" },
-        { text: "B) The Waterfall Model", answer: "wrong" },
-        { text: "C) CSS Grid Layout", answer: "wrong" }
-      ]
-    },
-    {
-      text: "Preposterous! One final test.",
-      riddle: "Question 3: Which is the most effective way to validate product-market fit?",
-      options: [
-        { text: "A) Launching a 3D animation", answer: "wrong" },
-        { text: "B) Customer Dev & Interviews", answer: "correct" },
-        { text: "C) Sending cold spam emails", answer: "wrong" }
-      ]
-    }
-  ];
-
-  const playerHpFill = document.getElementById('player-hp-fill');
-  const bossHpFill = document.getElementById('boss-hp-fill');
-
-  function updateHpBars() {
-    if (playerHpFill) playerHpFill.style.width = `${(botHp / 3) * 100}%`;
-    if (bossHpFill) bossHpFill.style.width = `${(bossHp / 3) * 100}%`;
-  }
-
-  function renderBossQuestion() {
-    const q = bossQuestions[currentQuestionIdx];
-    const bossText = document.getElementById('boss-text');
-    const bossRiddle = document.querySelector('.boss-riddle');
-    const bossOptions = document.querySelector('.boss-options');
-
-    if (bossText) bossText.textContent = q.text;
-    if (bossRiddle) bossRiddle.textContent = q.riddle;
-
-    if (bossOptions) {
-      bossOptions.innerHTML = '';
-      q.options.forEach(opt => {
-        const btn = document.createElement('button');
-        btn.className = 'boss-btn';
-        btn.textContent = opt.text;
-        btn.addEventListener('click', () => handleBossAnswer(opt.answer));
-        bossOptions.appendChild(btn);
-      });
-    }
-  }
-
-  function handleBossAnswer(answer) {
-    const bossOptions = document.querySelector('.boss-options');
-    const btns = bossOptions.querySelectorAll('.boss-btn');
-    btns.forEach(b => b.disabled = true);
-
-    if (answer === 'correct') {
-      sfx.click();
-      cineProjectile.className = 'projectile fireball';
-
-      setTimeout(() => {
-        sfx.secret();
-        cineProjectile.className = 'projectile';
-        
-        bossHp--;
-        updateHpBars();
-        
-        // Flash boss red & explode
-        cineBoss.style.filter = 'hue-rotate(90deg) brightness(1.5)';
-        setTimeout(() => cineBoss.style.filter = 'none', 300);
-
-        const arena = document.querySelector('.cinematic-arena');
-        if (arena) {
-          const explosion = document.createElement('div');
-          explosion.className = 'explosion';
-          explosion.style.right = '50px';
-          explosion.style.bottom = '100px';
-          arena.appendChild(explosion);
-          setTimeout(() => explosion.remove(), 400);
-          
-          arena.classList.add('shake');
-          setTimeout(() => arena.classList.remove('shake'), 400);
-        }
-
-        if (bossHp <= 0) {
-          cineBoss.classList.add('defeated');
-          bossUI.style.display = 'none';
-          contactRevealed.style.display = 'block';
-          showSpeech("BOOM! Gatekeeper defeated! Scroll down to see the email ↓");
-          
-          // Add a visual prompt to scroll down inside the arena
-          const scrollPrompt = document.createElement('div');
-          scrollPrompt.innerHTML = "<h3>Boss Defeated!</h3><p>Scroll down to unlock contact info ↓</p>";
-          scrollPrompt.style.position = 'absolute';
-          scrollPrompt.style.top = '50%';
-          scrollPrompt.style.left = '50%';
-          scrollPrompt.style.transform = 'translate(-50%, -50%)';
-          scrollPrompt.style.color = '#CCFF00';
-          scrollPrompt.style.textAlign = 'center';
-          scrollPrompt.style.fontFamily = 'var(--font-mono)';
-          scrollPrompt.style.fontSize = '1.5rem';
-          scrollPrompt.style.zIndex = '30';
-          bossLair.querySelector('.cinematic-arena').appendChild(scrollPrompt);
-          
-          if (window.checkAchievement) window.checkAchievement('game_complete');
-        } else {
-          currentQuestionIdx++;
-          renderBossQuestion();
-        }
-      }, 500);
-
-    } else {
-      sfx.hover();
-      cineProjectile.className = 'projectile laser';
-
-      setTimeout(() => {
-        sfx.achievement(); // play hit sound / shake
-        cineProjectile.className = 'projectile';
-        
-        botHp--;
-        updateHpBars();
-
-        // Bot hit effect
-        cineBot.style.transform = 'translateX(-20px) rotate(-15deg)';
-        cineBot.style.filter = 'invert(1) sepia(1) saturate(5) hue-rotate(300deg)';
-        
-        const arena = document.querySelector('.cinematic-arena');
-        if (arena) {
-          arena.classList.add('shake');
-          setTimeout(() => arena.classList.remove('shake'), 400);
-        }
-
-        setTimeout(() => {
-          cineBot.style.transform = 'none';
-          cineBot.style.filter = 'none';
-        }, 500);
-
-        if (botHp <= 0) {
-          showSpeech("You were defeated! Resetting challenge...");
-          botHp = 3;
-          bossHp = 3;
-          currentQuestionIdx = 0;
-          updateHpBars();
-          renderBossQuestion();
-        } else {
-          showSpeech("Incorrect! Try again.");
-          btns.forEach(b => b.disabled = false);
-        }
-      }, 500);
-    }
-  }
-
-  if (bossLair) {
-    renderBossQuestion();
-    updateHpBars();
-  }
 
   // --- SKILL TREE ---
   const canvas = document.getElementById('tree-lines');
@@ -871,5 +697,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     animate();
   }
+
+  // --- VIEW MORE TOGGLE ---
+  const viewMoreLinks = document.querySelectorAll('.view-more-link');
+  viewMoreLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const node = e.target.closest('.ladder-node');
+      if (node) {
+        node.classList.toggle('expanded');
+        if (node.classList.contains('expanded')) {
+          e.target.textContent = 'View less ⌃';
+        } else {
+          e.target.textContent = 'View more ⌄';
+        }
+      }
+    });
+  });
 
 });

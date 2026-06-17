@@ -477,7 +477,7 @@
 
           </div>
           
-          <div class="ladder-footer" style="text-align: center; margin-top: 60px; padding-top: 40px; border-top: 2px dashed rgba(255,255,255,0.1);">
+          <div class="ladder-footer" style="position: relative; z-index: 5; background: #2a2522; text-align: center; margin-top: 60px; padding-top: 40px; border-top: 2px dashed rgba(255,255,255,0.1);">
             <p style="color: #a09a90; margin-bottom: 15px; font-family: var(--font-mono); font-size: 0.85rem;">Curious about the actual design process?</p>
             <a href="https://aashray.designfolio.me/" target="_blank" class="btn-pixel">Explore Case Studies</a>
           </div>
@@ -486,41 +486,10 @@
     </section>
 
     <!-- ===== CONTACT (Level 6) ===== -->
-    <section class="contact-section section lvl-section" id="contact" data-level="6" data-level-name="Boss Level">
-      <div class="container contact-container" id="boss-lair">
-        <div class="section-header text-center" style="margin-bottom: 20px;">
-          <h2 class="section-title" style="margin-bottom: 10px;">Boss Fight</h2>
-          <p>Defeat the Gatekeeper to unlock my email!</p>
-        </div>
-        <div class="cinematic-arena">
-          <div class="health-bars-overlay">
-            <div class="hp-bar-container">
-              <span class="hp-label">PLAYER HP</span>
-              <div class="hp-track"><div class="hp-fill" id="player-hp-fill" style="width: 100%;"></div></div>
-            </div>
-            <div class="hp-bar-container">
-              <span class="hp-label">BOSS HP</span>
-              <div class="hp-track"><div class="hp-fill" id="boss-hp-fill" style="width: 100%;"></div></div>
-            </div>
-          </div>
-          <div class="cinematic-bot" id="cine-bot"></div>
-          <div class="cinematic-boss" id="cine-boss"></div>
-          <div class="projectile" id="cine-projectile"></div>
-          
-          <div class="boss-ui" id="boss-ui">
-            <div class="boss-dialogue">
-              <p id="boss-text">HALT! I am the Gatekeeper of the Inbox.</p>
-              <p class="boss-riddle">"What is the ultimate metric for true product growth?"</p>
-            </div>
-            <div class="boss-options">
-              <button class="boss-btn" data-answer="wrong">A) Lines of Code</button>
-              <button class="boss-btn" data-answer="correct">B) User Retention</button>
-              <button class="boss-btn" data-answer="wrong">C) Meetings Scheduled</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="contact-revealed" id="contact-revealed" style="display:none; text-align:center; margin-top: 50px;">
+    <section class="contact-section section lvl-section" id="contact" data-level="6" data-level-name="Contact">
+      <div class="container contact-container">
+        
+        <div class="contact-content" id="contact-content" style="text-align:center; margin-top: 50px;">
           <h2 class="section-title large">Let's Build<br>Together</h2>
           <p class="contact-text">
             Got a product idea? Need a growth strategy? Or just want to chat about startups and product thinking? Let's talk.

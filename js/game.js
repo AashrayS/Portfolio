@@ -851,7 +851,7 @@
 
       // Update checkpoint and section transitions
       const thresholds = [0, 800, 2000, 3200, 5000, 7000];
-      const sectionTitles = ['STAGE 1: THE BUILDER', 'STAGE 2: THE ORIGIN', 'STAGE 3: THE ARSENAL', 'STAGE 4: ACTIVE QUESTS', 'STAGE 5: JOURNEY MAP', 'BOSS FIGHT: GATEKEEPER'];
+      const sectionTitles = ['STAGE 1: THE BUILDER', 'STAGE 2: THE ORIGIN', 'STAGE 3: THE ARSENAL', 'STAGE 4: ACTIVE QUESTS', 'STAGE 5: JOURNEY MAP', 'STAGE 6: CONTACT'];
       let sectionIndex = 0;
       
       for (const t of thresholds) {
