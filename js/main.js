@@ -134,8 +134,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if(!soundEnabled) return;
       playTone(150, 'sawtooth', 0.2, 0.4);
       setTimeout(() => playTone(100, 'sawtooth', 0.3, 0.4), 150);
+    },
+    collect: () => {
+      if(!soundEnabled) return;
+      playTone(900, 'sine', 0.08, 0.08);
     }
   };
+  window.sfx = sfx;
 
   const soundToggle = document.getElementById('sound-toggle');
   const iconOff = document.getElementById('sound-icon-off');
@@ -336,47 +341,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   window.checkAchievement = checkAchievement;
 
-  // --- GATE LOGIC ---
-  function checkGatedContent() {
-    const gates = document.querySelectorAll('.gated-content');
-    gates.forEach(gate => {
-      if (!gate.classList.contains('locked')) return;
-      
-      const id = gate.getAttribute('data-gate-id');
-      let shouldUnlock = false;
-      let msg = "";
-
-      if (id === 'skills' && unlocked.includes('first_blood')) {
-        shouldUnlock = true;
-        msg = "SKILLS UNLOCKED!";
-      } else if (id === 'quests' && unlocked.includes('skill_master')) {
-        shouldUnlock = true;
-        msg = "QUESTS UNLOCKED!";
-      } else if (id === 'journey' && unlocked.includes('quest_hunter')) {
-        shouldUnlock = true;
-        msg = "JOURNEY UNLOCKED!";
-      } else if (id === 'contact' && unlocked.length >= 3) {
-        shouldUnlock = true;
-        msg = "CONTACT UNLOCKED!";
-        if (window.checkAchievement) window.checkAchievement('game_complete');
-      }
-
-      if (shouldUnlock) {
-        gate.classList.remove('locked');
-        sfx.secret(); 
-        showSpeech(`ACCESS GRANTED.<br>${msg}`);
-      }
-    });
-  }
-  window.checkGatedContent = checkGatedContent;
-
-  // Override renderAchievements to also check gate
-  const _originalRenderAchievements = renderAchievements;
-  renderAchievements = function() {
-    _originalRenderAchievements();
-    checkGatedContent();
-  };
-
   renderAchievements();
 
 
@@ -431,7 +395,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     nodes.forEach(node => {
       node.addEventListener('mouseenter', () => {
-        if(window.sfx) sfx.hover();
+        sfx.hover();
         nodes.forEach(n => n.classList.remove('active'));
         node.classList.add('active');
         infoTitle.textContent = node.getAttribute('data-title');
@@ -649,75 +613,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-  // --- 3D WIZARD BOT (Three.js) ---
-  const container = document.getElementById('wizard-canvas-container');
-  if (container && window.THREE) {
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    container.appendChild(renderer.domElement);
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-    scene.add(ambientLight);
-    const pointLight = new THREE.PointLight(0xCCFF00, 1);
-    pointLight.position.set(5, 5, 5);
-    scene.add(pointLight);
-
-    const wizardGroup = new THREE.Group();
-
-    // Head (Sphere)
-    const headGeo = new THREE.SphereGeometry(1.2, 32, 32);
-    const headMat = new THREE.MeshPhongMaterial({ color: 0x1B1464, shininess: 100 });
-    const head = new THREE.Mesh(headGeo, headMat);
-    wizardGroup.add(head);
-
-    // Hat (Cone)
-    const hatGeo = new THREE.ConeGeometry(1.5, 3, 32);
-    const hatMat = new THREE.MeshPhongMaterial({ color: 0xCCFF00, flatShading: true });
-    const hat = new THREE.Mesh(hatGeo, hatMat);
-    hat.position.y = 2;
-    wizardGroup.add(hat);
-
-    // Eyes (Glowing spheres)
-    const eyeGeo = new THREE.SphereGeometry(0.2, 16, 16);
-    const eyeMat = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
-    const leftEye = new THREE.Mesh(eyeGeo, eyeMat);
-    leftEye.position.set(-0.4, 0.2, 1.1);
-    const rightEye = new THREE.Mesh(eyeGeo, eyeMat);
-    rightEye.position.set(0.4, 0.2, 1.1);
-    wizardGroup.add(leftEye);
-    wizardGroup.add(rightEye);
-
-    scene.add(wizardGroup);
-    camera.position.z = 8;
-
-    // Mouse tracking
-    let targetRotationX = 0;
-    let targetRotationY = 0;
-    document.addEventListener('mousemove', (e) => {
-      const mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-      const mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
-      targetRotationY = mouseX * 0.5;
-      targetRotationX = -mouseY * 0.5;
-    });
-
-    let time = 0;
-    function animate() {
-      requestAnimationFrame(animate);
-      time += 0.05;
-      
-      // Floating animation
-      wizardGroup.position.y = Math.sin(time) * 0.3;
-      
-      // Smooth rotation to mouse
-      wizardGroup.rotation.y += (targetRotationY - wizardGroup.rotation.y) * 0.1;
-      wizardGroup.rotation.x += (targetRotationX - wizardGroup.rotation.x) * 0.1;
-
-      renderer.render(scene, camera);
-    }
-    animate();
-  }
 
   // --- VIEW MORE TOGGLE ---
   const viewMoreLinks = document.querySelectorAll('.view-more-link');

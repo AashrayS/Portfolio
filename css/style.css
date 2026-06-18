@@ -1170,7 +1170,6 @@ a { text-decoration: none; color: inherit; }
   .hero-layout, .about-grid { grid-template-columns: 1fr; gap: 40px; }
   .hero-visual-col { height: 400px; }
   .hero-card-1 { left: 0; }
-  .node-content { width: 40%; }
   .nav-links, .nav-cta { display: none; }
   .nav-toggle { display: flex; }
 }
@@ -1289,9 +1288,6 @@ a { text-decoration: none; color: inherit; }
   
   /* === FOOTER === */
   .footer-container { flex-direction: column; gap: 10px; text-align: center; }
-  
-  /* === GATE OVERLAY === */
-  .gate-overlay h2 { font-size: 1.5rem; }
 }
 
 /* ================================================================
@@ -1453,143 +1449,5 @@ body.game-active {
   /* The canvas pointer-events:auto captures all user interaction */
 }
 
-/* ===== PHASE 2: GATED CONTENT ===== */
-.gated-content {
-  position: relative;
-  transition: filter 0.8s ease, opacity 0.8s ease;
-}
-.gated-content.locked {
-  filter: grayscale(100%) blur(8px);
-  pointer-events: none;
-  user-select: none;
-  opacity: 0.6;
-}
-.gate-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 50;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: rgba(27, 20, 100, 0.4);
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.5s ease;
-  pointer-events: auto;
-}
-.gated-content.locked .gate-overlay {
-  opacity: 1;
-  visibility: visible;
-}
-.gate-overlay h2 {
-  font-size: 3rem;
-  color: var(--accent-pink);
-  margin-bottom: 10px;
-  text-shadow: 4px 4px 0 var(--dark-color);
-}
-.gate-overlay p {
-  font-size: 1.2rem;
-  color: var(--white);
-  font-family: var(--font-mono);
-  background: var(--dark-color);
-  padding: 8px 16px;
-  border-radius: 4px;
-}
-.lock-icon {
-  margin-top: 20px;
-  color: var(--bg-color);
-  background: var(--dark-color);
-  padding: 16px;
-  border-radius: 50%;
-  animation: pulse 2s infinite;
-}
 
-/* ===== PHASE 2: BOSS FIGHT MODAL ===== */
-.boss-fight-box {
-  width: 90%;
-  max-width: 600px;
-  padding: 0;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-.boss-header {
-  background: var(--accent-pink);
-  color: var(--white);
-  padding: 16px;
-  text-align: center;
-  border-bottom: 4px solid var(--dark-color);
-}
-.boss-header h2 {
-  font-size: 1.5rem;
-  margin: 0;
-}
-.boss-body {
-  padding: 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
-.boss-dialogue {
-  background: var(--bg-color);
-  color: var(--dark-color);
-  padding: 16px 24px;
-  border-radius: 12px;
-  border: 4px solid var(--dark-color);
-  font-family: var(--font-mono);
-  font-size: 1.1rem;
-  font-weight: bold;
-  text-align: center;
-  position: relative;
-}
-.boss-dialogue::after {
-  content: '';
-  position: absolute;
-  top: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 10px solid var(--dark-color);
-}
-.boss-riddle {
-  margin-top: 10px;
-  color: var(--accent-pink);
-  font-size: 1.2rem;
-}
-.boss-options {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  gap: 12px;
-}
-.boss-btn {
-  background: var(--dark-color);
-  color: var(--white);
-  border: 2px solid var(--dark-color);
-  padding: 14px 20px;
-  border-radius: 8px;
-  font-family: var(--font-mono);
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  text-align: left;
-  transition: all 0.2s;
-}
-.boss-btn:hover {
-  background: var(--bg-color);
-  color: var(--dark-color);
-  transform: translateX(10px);
-}
-.boss-feedback {
-  padding: 16px;
-  text-align: center;
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-.boss-feedback.success { background: var(--bg-color); color: var(--dark-color); }
-.boss-feedback.error { background: var(--accent-pink); color: var(--white); }
 

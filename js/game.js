@@ -313,7 +313,7 @@
 
   // ========== PLAYER ==========
   class Player {
-    constructor(x, y, sprite) {
+    constructor(x, y) {
       this.x = x;
       this.y = y;
       this.vx = 0;
@@ -321,7 +321,6 @@
       this.w = PLAYER_W;
       this.h = PLAYER_H;
       this.grounded = false;
-      this.sprite = sprite;
       this.facingRight = true;
       this.jumpHeld = false;
       this.trail = []; // afterimage trail
@@ -748,7 +747,7 @@
       // Spawn floating in the hero section so the player can see them drop in
       const spawnX = window.innerWidth / 2 - PLAYER_W / 2;
       const spawnY = 100;
-      this.player = new Player(spawnX, spawnY, this.spriteImg);
+      this.player = new Player(spawnX, spawnY);
       this.checkpointX = this.player.x;
       this.checkpointY = this.player.y;
     }
