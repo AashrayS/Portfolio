@@ -1143,13 +1143,16 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* Responsive */
-@media (max-width: 992px) {
+@media (max-width: 1024px) {
   .hero-layout, .about-grid { grid-template-columns: 1fr; gap: 40px; }
   .hero-visual-col { height: 400px; }
   .hero-card-1 { left: 0; }
   .node-content { width: 40%; }
   .nav-links, .nav-cta { display: none; }
   .nav-toggle { display: flex; }
+  
+  /* Hide sidebars and game elements on tablet & mobile to prevent overlaps */
+  #game-toggle, #xp-container, #quests-loader-bar, #character-guide { display: none !important; }
 }
 @media (max-width: 768px) {
   /* === GLOBAL SECTION FIXES === */
@@ -1161,9 +1164,6 @@ a { text-decoration: none; color: inherit; }
   .container { padding: 0 16px; }
   .hero-title { font-size: clamp(2rem, 8vw, 3rem); }
   .hero.section { padding-top: 100px; }
-  
-  /* Hide sidebars and game elements on mobile */
-  #game-toggle, #xp-container, #quests-loader-bar, #character-guide { display: none !important; }
   
   /* === ABOUT SECTION === */
   .about-section { border-top: 2px solid var(--dark-color); border-bottom: 2px solid var(--dark-color); }
