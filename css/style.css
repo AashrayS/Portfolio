@@ -935,6 +935,10 @@ a { text-decoration: none; color: inherit; }
   background: var(--off-white);
   border-top: 4px solid var(--dark-color);
 }
+.work-section .section-title,
+.experience-section .section-title {
+  color: var(--dark-color);
+}
 /* ===== CAREER LADDER ===== */
 .career-ladder-container {
   background: #2a2522;

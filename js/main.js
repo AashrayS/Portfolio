@@ -598,6 +598,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- CAREER LADDER SCROLL ANIMATION ---
   const ladderContainer = document.querySelector('.career-ladder-container');
   const careerSprite = document.getElementById('career-sprite');
+  const ladderWrapper = document.querySelector('.ladder-graphic-wrapper');
   if (ladderContainer && careerSprite) {
     let ticking = false;
     window.addEventListener('scroll', () => {
@@ -618,9 +619,29 @@ document.addEventListener('DOMContentLoaded', () => {
             progress = 0;
           }
           
-          const maxTop = rect.height - 120; 
-          const spriteTop = progress * maxTop;
-          careerSprite.style.transform = `translateY(${spriteTop}px)`;
+          const nodes = ladderContainer.querySelectorAll('.ladder-node');
+          if (nodes.length > 0) {
+            const firstNode = nodes[0];
+            const lastNode = nodes[nodes.length - 1];
+            
+            const firstNodeRect = firstNode.getBoundingClientRect();
+            const lastNodeRect = lastNode.getBoundingClientRect();
+            
+            // Size the ladder rails to end cleanly just after the last node
+            if (ladderWrapper) {
+              const distanceToBottom = rect.bottom - lastNodeRect.bottom;
+              ladderWrapper.style.bottom = `${distanceToBottom + 20}px`;
+            }
+            
+            const wrapperTopOffset = 100; // matching CSS top: 100px
+            const spriteHeightOffset = 28; // half of 56px sprite height
+            
+            const firstNodeCenter = (firstNodeRect.top + firstNodeRect.height / 2) - rect.top - wrapperTopOffset - spriteHeightOffset;
+            const lastNodeCenter = (lastNodeRect.top + lastNodeRect.height / 2) - rect.top - wrapperTopOffset - spriteHeightOffset;
+            
+            const spriteTop = firstNodeCenter + progress * (lastNodeCenter - firstNodeCenter);
+            careerSprite.style.transform = `translateY(${spriteTop}px)`;
+          }
           
           ticking = false;
         });
