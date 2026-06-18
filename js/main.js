@@ -607,18 +607,6 @@ document.addEventListener('DOMContentLoaded', () => {
           const rect = ladderContainer.getBoundingClientRect();
           const windowHeight = window.innerHeight;
           
-          const startScroll = windowHeight * 0.75;
-          const endScroll = -rect.height + (windowHeight * 0.25);
-          
-          let progress = 0;
-          if (rect.top <= startScroll && rect.top >= endScroll) {
-            progress = (startScroll - rect.top) / (startScroll - endScroll);
-          } else if (rect.top < endScroll) {
-            progress = 1;
-          } else if (rect.top > startScroll) {
-            progress = 0;
-          }
-          
           const nodes = ladderContainer.querySelectorAll('.ladder-node');
           if (nodes.length > 0) {
             const firstNode = nodes[0];
@@ -626,6 +614,18 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const firstNodeRect = firstNode.getBoundingClientRect();
             const lastNodeRect = lastNode.getBoundingClientRect();
+            
+            // Calculate progress based on viewport-relative target line (center of viewport)
+            const viewportTarget = windowHeight * 0.5;
+            let progress = 0;
+            
+            if (firstNodeRect.top <= viewportTarget && lastNodeRect.top >= viewportTarget) {
+              progress = (viewportTarget - firstNodeRect.top) / (lastNodeRect.top - firstNodeRect.top);
+            } else if (lastNodeRect.top < viewportTarget) {
+              progress = 1;
+            } else {
+              progress = 0;
+            }
             
             // Size the ladder rails to end cleanly just after the last node
             if (ladderWrapper) {
