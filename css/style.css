@@ -32,13 +32,28 @@
   box-sizing: border-box;
 }
 
+html, body {
+  overflow-x: hidden;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
 body {
   font-family: var(--font-body);
   background-color: var(--bg-color);
   color: var(--text-main);
   line-height: 1.6;
-  overflow-x: hidden;
   cursor: crosshair;
+}
+#main-wrapper {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.section {
+  width: 100% !important;
+  margin: 0 !important;
 }
 
 body.no-scroll {
@@ -1147,6 +1162,10 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* Responsive */
+@media (max-width: 1200px) {
+  /* Hide sidebars and game elements on smaller screens to prevent overlaps */
+  #game-toggle, #xp-container, #quests-loader-bar, #character-guide { display: none !important; }
+}
 @media (max-width: 1024px) {
   .hero-layout, .about-grid { grid-template-columns: 1fr; gap: 40px; }
   .hero-visual-col { height: 400px; }
@@ -1154,9 +1173,6 @@ a { text-decoration: none; color: inherit; }
   .node-content { width: 40%; }
   .nav-links, .nav-cta { display: none; }
   .nav-toggle { display: flex; }
-  
-  /* Hide sidebars and game elements on tablet & mobile to prevent overlaps */
-  #game-toggle, #xp-container, #quests-loader-bar, #character-guide { display: none !important; }
 }
 @media (max-width: 768px) {
   /* === GLOBAL SECTION FIXES === */
