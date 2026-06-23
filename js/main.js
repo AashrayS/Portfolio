@@ -6,51 +6,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize Icons
   lucide.createIcons();
 
-  // --- DRAW PIXEL BOT AVATAR ---
-  const avatarCanvas = document.getElementById('guide-avatar-canvas');
-  if (avatarCanvas) {
-    const ctx = avatarCanvas.getContext('2d');
-    const p = 6; // pixel size for 60x60 canvas (10x12 grid)
-    const offsetX = 0;
-    const offsetY = -6; // center slightly
-    
-    const G = '#CCFF00'; // neon green (body)
-    const D = '#1B1464'; // dark indigo
-    const W = '#FFFFFF'; // white (eyes)
-    const O = '#FF6B35'; // orange
-    const _ = null;
-    
-    const sprite = [
-      [_,_,_,D,D,D,D,_,_,_],
-      [_,_,D,G,G,G,G,D,_,_],
-      [_,D,G,G,G,G,G,G,D,_],
-      [_,D,W,D,G,G,W,D,D,_],
-      [_,D,G,G,G,G,G,G,D,_],
-      [_,_,D,G,D,D,G,D,_,_],
-      [_,_,_,D,D,D,D,_,_,_],
-      [_,D,D,O,O,O,O,D,D,_],
-      [D,G,D,O,O,O,O,D,G,D],
-      [D,G,D,O,O,O,O,D,G,D],
-      [_,_,D,D,_,_,D,D,_,_],
-      [_,D,D,_,_,_,_,D,D,_],
-    ];
-    
-    for (let r = 0; r < sprite.length; r++) {
-      for (let c = 0; c < sprite[r].length; c++) {
-        if (sprite[r][c]) {
-          ctx.fillStyle = sprite[r][c];
-          ctx.fillRect(offsetX + c * p, offsetY + r * p, p, p);
-        }
-      }
-    }
-  }
-
   // --- RESET STATE ON RELOAD ---
   if (history.scrollRestoration) {
     history.scrollRestoration = 'manual';
   }
   window.scrollTo(0, 0);
-  localStorage.removeItem('as_achievements');
 
   // --- MOBILE NAV TOGGLE ---
   const navToggle = document.getElementById('nav-toggle');
@@ -160,33 +120,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // --- INTRO GATE ---
+  // --- INTRO GATE (0.5s auto-dismiss) ---
   const introGate = document.getElementById('intro-gate');
-  const btnStart = document.getElementById('btn-start');
-  const introText = document.getElementById('intro-text');
-  
-  const typeIntro = async () => {
-    const text = "System initialized.\nLoading 'Aashray.exe'...\nReady to begin quest.";
-    for (let i = 0; i < text.length; i++) {
-      introText.textContent += text[i];
-      if(text[i] !== ' ') sfx.hover();
-      await new Promise(r => setTimeout(r, 40));
-    }
-  };
-  
-  setTimeout(typeIntro, 500);
 
-  btnStart.addEventListener('click', () => {
-    initAudio();
-    sfx.levelUp();
-    introGate.classList.add('hidden');
-    document.body.classList.remove('no-scroll');
+  if (introGate) {
     setTimeout(() => {
-      introGate.style.display = 'none';
-      startHeroTyping();
-      checkAchievement('first_blood');
-    }, 800);
-  });
+      introGate.classList.add('hidden');
+      document.body.classList.remove('no-scroll');
+      setTimeout(() => {
+        introGate.style.display = 'none';
+        startHeroTyping();
+      }, 500);
+    }, 500);
+  }
 
   // --- TYPEWRITER EFFECTS ---
   function typeText(elementId, text, speed = 50) {
@@ -208,142 +154,8 @@ document.addEventListener('DOMContentLoaded', () => {
     typeText('hero-title-type', "Strategy. Product.\nGrowth.", 60);
   }
 
-  // --- CHARACTER GUIDE & XP BAR ---
-  const sections = document.querySelectorAll('.lvl-section');
-  const xpFill = document.getElementById('xp-bar-fill');
-  const xpCounter = document.getElementById('xp-counter');
-  const levelNameEl = document.getElementById('current-level-name');
-  
-  const charGuide = document.getElementById('character-guide');
-  const speechBubble = document.getElementById('speech-bubble');
-  const speechText = document.getElementById('speech-text');
-  const sprite = document.getElementById('character-sprite');
-  
-  let currentLevel = 0;
-  const maxXP = 1000;
-  let speechTimeout;
-
-  sprite.addEventListener('click', () => {
-    sfx.click();
-    sprite.classList.add('bounce');
-    setTimeout(() => sprite.classList.remove('bounce'), 500);
-  });
-
-  function showSpeech(text) {
-    sfx.levelUp();
-    clearTimeout(speechTimeout);
-    
-    charGuide.classList.add('active'); // Slide in
-    speechBubble.classList.add('active');
-    
-    // Set text instantly for maximum readability
-    speechText.innerHTML = text;
-
-    speechTimeout = setTimeout(() => {
-      speechBubble.classList.remove('active');
-      charGuide.classList.remove('active'); // Slide out
-    }, 5000);
-  }
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const level = parseInt(entry.target.getAttribute('data-level'));
-        const name = entry.target.getAttribute('data-level-name');
-        
-        if (level > currentLevel) {
-          currentLevel = level;
-          
-          let msgs = [
-            `I'm ready! Let's build.`,
-            `Level 2! Check out my origin story.`,
-            `Level 3! Inspect the skill tree.`,
-            `Level 4! These are my active quests.`,
-            `Level 5! The journey map.`
-          ];
-          showSpeech(`Level ${level} Unlocked!<br>${msgs[level-1] || ''}`);
-          
-          levelNameEl.textContent = `Lvl ${level}: ${name}`;
-          
-          const progress = (level / sections.length) * 100;
-          xpFill.style.height = `${progress}%`;
-          
-          let currentXpVal = Math.floor((maxXP / sections.length) * level);
-          xpCounter.textContent = `${currentXpVal} / ${maxXP} XP`;
-          
-          if(level === sections.length) {
-            checkAchievement('game_complete');
-          }
-        }
-      }
-    });
-  }, { threshold: 0.3 });
-
-  sections.forEach(section => observer.observe(section));
-
-  // --- ACHIEVEMENTS SYSTEM ---
-  const achievements = {
-    first_blood: { id: 'first_blood', name: 'Press Start', desc: 'Started the journey', icon: 'play' },
-    skill_master: { id: 'skill_master', name: 'Skill Master', desc: 'Explored the skill tree', icon: 'book' },
-    quest_hunter: { id: 'quest_hunter', name: 'Quest Hunter', desc: 'Flipped a quest card', icon: 'sword' },
-    game_complete: { id: 'game_complete', name: 'Contact Unlocked', desc: 'Reached the contact section', icon: 'flag' },
-    konami: { id: 'konami', name: 'Hacker', desc: 'Entered the secret code', icon: 'terminal' }
-  };
-
-  let unlocked = JSON.parse(localStorage.getItem('as_achievements') || '[]');
-  const trayList = document.getElementById('tray-list');
-  const countText = document.getElementById('achievement-count-text');
-  const progressFill = document.getElementById('achievement-progress-fill');
-  
-  const questsLoader = document.getElementById('quests-loader-bar');
-  const questsExpandBtn = document.getElementById('quests-expand-btn');
-
-  questsExpandBtn.addEventListener('click', () => {
-    sfx.click();
-    questsLoader.classList.toggle('collapsed');
-  });
-
-  function renderAchievements() {
-    trayList.innerHTML = '';
-    let count = 0;
-    const total = Object.keys(achievements).length;
-    
-    Object.values(achievements).forEach(ach => {
-      const isUnlocked = unlocked.includes(ach.id);
-      if(isUnlocked) count++;
-      
-      const el = document.createElement('div');
-      el.className = `achievement-item ${isUnlocked ? 'unlocked' : ''}`;
-      el.innerHTML = `
-        <div class="ach-header">
-          <div class="ach-icon-small"><i data-lucide="${ach.icon}"></i></div>
-          <span>${isUnlocked ? ach.name : '???'}</span>
-        </div>
-      `;
-      trayList.appendChild(el);
-    });
-    
-    countText.textContent = `${count}/${total}`;
-    progressFill.style.height = `${(count / total) * 100}%`;
-    
-    lucide.createIcons();
-  }
-
-  function checkAchievement(id) {
-    if (!unlocked.includes(id)) {
-      unlocked.push(id);
-      localStorage.setItem('as_achievements', JSON.stringify(unlocked));
-      sfx.achievement();
-      renderAchievements();
-      
-      showSpeech(`🏆 ACHIEVEMENT UNLOCKED!<br>${achievements[id].name}`);
-    }
-  }
-  window.checkAchievement = checkAchievement;
-
-  renderAchievements();
-
-
+  // --- ACHIEVEMENTS STUB (for game.js compatibility) ---
+  window.checkAchievement = function() {};
 
   // --- SKILL TREE ---
   const canvas = document.getElementById('tree-lines');

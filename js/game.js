@@ -562,12 +562,7 @@
       this._onResize = () => this.resizeCanvas();
       window.addEventListener('resize', this._onResize);
 
-      // Auto-start on load
-      window.addEventListener('DOMContentLoaded', () => {
-         setTimeout(() => {
-            if (this.state === 'IDLE') this.start();
-         }, 800); // slight delay to let DOM stabilize
-      });
+      // Game starts only when user clicks the toggle button (opt-in)
     }
 
     toggle() {
