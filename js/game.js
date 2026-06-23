@@ -479,10 +479,20 @@
       if (isBotActive && timeSinceUserScroll > 1200) {
         const currentScroll = window.scrollY;
         const botScreenY = player.y - currentScroll;
+        
+        // Follow the player faster when they are moving rapidly vertically to prevent lag/stutter feeling
+        let lerpFactor = 0.1;
+        if (Math.abs(player.vy) > 5) {
+          lerpFactor = 0.25;
+        }
+
         // Auto-scroll only if bot goes near viewport margins
         if (botScreenY < viewportH * 0.25 || botScreenY > viewportH * 0.75) {
           game.isProgrammaticScroll = true;
-          window.scrollTo(0, currentScroll + (this.targetY - currentScroll) * 0.1);
+          const diff = this.targetY - currentScroll;
+          if (Math.abs(diff) > 2) {
+            window.scrollTo(0, currentScroll + diff * lerpFactor);
+          }
         }
       }
       
@@ -553,6 +563,8 @@
       this.overlayBtn.addEventListener('click', () => {
         if (this.state === 'WIN') {
           this.stop();
+        } else if (this.state === 'RESPAWN') {
+          this.respawn();
         } else {
           this.restart();
         }
@@ -616,6 +628,21 @@
       this.lives = 3;
       this.braincells.forEach(b => b.collected = false);
       this.spawnPlayer();
+      this.state = 'PLAYING';
+      this.updateHUD();
+      requestAnimationFrame(this._boundLoop);
+    }
+
+    respawn() {
+      this.overlay.classList.remove('active');
+      this.player.x = this.checkpointX;
+      this.player.y = this.checkpointY - 50;
+      this.player.vx = 0;
+      this.player.vy = 0;
+      this.player.invincible = 180; // 3 seconds blinking i-frames
+      this.camera.targetY = this.player.y - window.innerHeight * 0.35;
+      this.camera.y = this.camera.targetY;
+      window.scrollTo(0, this.camera.y);
       this.state = 'PLAYING';
       this.updateHUD();
       requestAnimationFrame(this._boundLoop);
@@ -968,19 +995,15 @@
                   // Lose life
                   this.lives--;
                   if (window.sfx && window.sfx.error) window.sfx.error();
+                  
+                  const deathReason = obs.type === 'spike' ? 'hitting a sharp spike!' : 'colliding with an enemy bot!';
+                  
                   if (this.lives <= 0) {
                      this.state = 'LOSE';
-                     this.showOverlay('GAME OVER', 'You got zapped. Play again?', 'Restart');
+                     this.showOverlay('💀 GAME OVER', `You died by ${deathReason}`, 'Restart');
                   } else {
-                     // Respawn at checkpoint
-                     this.player.x = this.checkpointX;
-                     this.player.y = this.checkpointY - 50;
-                     this.player.vx = 0;
-                     this.player.vy = 0;
-                     this.player.invincible = 180; // 3 seconds blinking i-frames
-                     this.camera.targetY = this.player.y - window.innerHeight * 0.35;
-                     this.camera.y = this.camera.targetY;
-                     window.scrollTo(0, this.camera.y);
+                     this.state = 'RESPAWN';
+                     this.showOverlay('💀 YOU DIED', `You died by ${deathReason}`, `Respawn (${this.lives} ${this.lives === 1 ? 'life' : 'lives'} left)`);
                   }
                }
                break;
@@ -1006,29 +1029,31 @@
          }
       }
 
-      // Fall death check — die if falling off the visible screen, but only if the camera is close to the player (meaning the player is playing, not the user manually scrolling away)
+      // Fall death check — die if falling off the visible screen, but only if the user hasn't manually scrolled away in the last 1.5 seconds
       const viewportBottom = this.camera.y + window.innerHeight;
-      const cameraCenteringY = this.player.y - window.innerHeight * 0.35;
-      const cameraDist = Math.abs(window.scrollY - cameraCenteringY);
+      const timeSinceUserScroll = Date.now() - this.lastUserScrollTime;
 
-      if (this.player.y > viewportBottom + 100 && cameraDist < window.innerHeight * 0.6) {
+      if (this.player.y > viewportBottom + 800 && timeSinceUserScroll > 1500) {
         this.lives--;
+        const deathReason = 'falling into the bottomless abyss!';
         if (window.sfx && window.sfx.error) window.sfx.error();
         if (this.lives <= 0) {
           this.state = 'LOSE';
           this.showOverlay(
             '💀 GAME OVER',
-            `You collected ${this.collected}/${this.totalBraincells} braincells. Try again!`,
+            `You died by ${deathReason} You collected ${this.collected}/${this.totalBraincells} braincells.`,
             'Restart'
           );
           return;
+        } else {
+          this.state = 'RESPAWN';
+          this.showOverlay(
+            '💀 YOU DIED',
+            `You died by ${deathReason}`,
+            `Respawn (${this.lives} ${this.lives === 1 ? 'life' : 'lives'} left)`
+          );
+          return;
         }
-        // Respawn at checkpoint
-        this.player.x = this.checkpointX;
-        this.player.y = this.checkpointY;
-        this.player.vx = 0;
-        this.player.vy = 0;
-        this.updateHUD();
       }
 
       // Prevent going off left/right edges

@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- NAVBAR SCROLL EFFECT ---
   const navbar = document.getElementById('navbar');
   window.addEventListener('scroll', () => {
+    if (document.body.classList.contains('game-active')) return;
     if(window.scrollY > 50) {
       navbar.classList.add('scrolled');
     } else {
@@ -378,6 +379,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (ladderContainer && careerSprite) {
     let ticking = false;
     window.addEventListener('scroll', () => {
+      if (document.body.classList.contains('game-active')) return;
       if (!ticking) {
         window.requestAnimationFrame(() => {
           const rect = ladderContainer.getBoundingClientRect();
